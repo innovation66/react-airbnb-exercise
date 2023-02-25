@@ -1,32 +1,34 @@
 import React, { memo, useEffect } from 'react'
-import { useState } from 'react'
-import lzsRequest from '../../services'
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
+
+import { fetchHomeDataAction } from '@/store/modules/home'
+import HomeBanner from './c-cpns/home-banner'
+import { HomeWrapper } from './style'
+import SectionHeader from '@/components/section-header'
+import SectionRooms from '@/components/section-rooms'
 
 const Home = memo(() => {
-  console.log('1111111111111111111111')
-    const [ highScore, setHighScore ] = useState({})
+  /** 从redux中获取数据 */
+  const { goodPriceInfo } = useSelector((state) => ({
+    goodPriceInfo: state.home.goodPriceInfo
+  }), shallowEqual)
 
-    // 网络请求的代码
-    useEffect(() => {
-      console.log('22222222222222222222222222')
-      lzsRequest.get({url: "/home/highscore"}).then(res => {
-        console.log(res)
-        setHighScore(res)
-      })
-    }, [])
-  
+  /** 派发异步的事件: 发送网络请求 */
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(fetchHomeDataAction("xxxx"))
+  }, [dispatch])
+
   return (
-    <div>
-        <h2>{highScore.title}</h2>
-        <h4>{highScore.subtitle}</h4>
-        <ul>
-            {
-                highScore.list?.map((item) => {
-                    return <li key={item.id}>{item.name}</li>
-                })
-            }
-        </ul>
-    </div>
+    <HomeWrapper>
+      <HomeBanner/>
+      <div className='content'>
+        <div className='good-price'>
+          <SectionHeader title={goodPriceInfo.title}/>
+          <SectionRooms roomList={goodPriceInfo.list}/>
+        </div>
+      </div>
+    </HomeWrapper>
   )
 })
 
