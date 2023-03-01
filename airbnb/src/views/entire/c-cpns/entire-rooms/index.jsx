@@ -5,6 +5,7 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { RoomsWrapper } from './style'
 
+
 const EntireRooms = memo(() => {
   /** 从redux中获取roomList数据 */
   const { roomList, totalCount, isLoading } = useSelector((state) => ({
